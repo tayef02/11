@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <cstring>
+using namespace std;
+
+void bfs(int src, vector<vector<int>>& adj, vector<int>& level) {
+    int n = adj.size();
+    vector<bool> vis(n, false);
+
+    queue<int> q;
+    q.push(src);
+    vis[src] = true;
+    level[src] = 0;
+
+    while (!q.empty()) {
+        int f = q.front();
+        q.pop();
+
+        cout << f << " "; // BFS traversal order
+
+        for (int v : adj[f]) {
+            if (!vis[v]) {
+                q.push(v);
+                vis[v] = true;
+                level[v] = level[f] + 1;
+            }
+        }
+    }
+}
+
+int main() {
+    int n, e;
+    cin >> n >> e;
+
+    vector<vector<int>> adj(n + 1);
+    vector<int> level(n + 1, -1);
+
+    for (int i = 0; i < e; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u); // undirected
+    }
+
+    int src, dis;
+    cin >> src >> dis;
+
+    bfs(src, adj, level);
+
+    cout << endl;
+    if (level[dis] != -1)
+        cout << "Shortest distance from " << src << " to " << dis << " = " << level[dis] << endl;
+    else
+        cout << "Not reachable" << endl;
+
+    return 0;
+}
